@@ -293,7 +293,7 @@ void Monitor(void) {
     } else if (!stricmp(argv[0], "h"))
         MonHelp();
     else
-        debugf("\r\nInvalid Command...");
+        debugf("\r\nInvalid Command <%s>", argv[0]);
 
     Prompt();
 #endif

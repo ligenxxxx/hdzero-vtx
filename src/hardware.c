@@ -74,6 +74,8 @@ uint8_t temp_err = 0;
 #ifdef USE_TEMPERATURE_SENSOR
 int16_t temp0 = 0;
 uint8_t p;
+#else
+uint8_t p;
 #endif
 
 uint8_t i = 0;
@@ -698,13 +700,13 @@ void PowerAutoSwitch() {
 
     if (last_ofs != pwr_offset) {
 #ifdef _DEBUG_MODE
-        verbosef("\r\nPowerAutoSwitch:Yes 0x%x 0x%x", temp, (uint16_t)pwr_offset);
+        ; // verbosef("\r\nPowerAutoSwitch:Yes 0x%x 0x%x", temp, (uint16_t)pwr_offset);
 #endif
         DM6300_SetPower(RF_POWER, RF_FREQ, pwr_offset);
         cur_pwr = RF_POWER;
     } else {
 #ifdef _DEBUG_MODE
-        verbosef("\r\nPowerAutoSwitch: No 0x%x 0x%x", temp, (uint16_t)pwr_offset);
+        ; // verbosef("\r\nPowerAutoSwitch: No 0x%x 0x%x", temp, (uint16_t)pwr_offset);
 #endif
     }
 
