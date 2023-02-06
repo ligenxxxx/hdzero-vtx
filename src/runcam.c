@@ -424,6 +424,7 @@ void runcam_reset_isp(void) {
 uint8_t runcam_set(uint8_t *setting_profile) {
     static uint8_t init_done = 0;
     uint8_t ret = 0;
+    return 1;
     if (!init_done || runcam_setting_update_need(setting_profile, 0, 0) || runcam_setting_update_need(setting_profile, 10, 10))
         runcam_brightness(setting_profile[0], setting_profile[10]); // include led_mode
 
