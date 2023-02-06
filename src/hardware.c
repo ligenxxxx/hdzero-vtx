@@ -706,7 +706,7 @@ void PowerAutoSwitch() {
     }
 
     if (temp_err)
-        pwr_offset = 10;
+        pwr_offset = 0; // 10;
 
     if (OFFSET_25MW <= 10) {
         if (temp_err)
