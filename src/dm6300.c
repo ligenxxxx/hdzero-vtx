@@ -149,7 +149,11 @@ void DM6300_SetPower(uint8_t pwr, uint8_t freq, uint8_t offset) {
     uint16_t a_tab[2] = {0x21F, 0x41F};
 #endif
     int16_t p;
+
+#ifdef FOXEER_VTX
     offset = 0;
+#endif
+
 #ifdef _DEBUG_MODE
     debugf("\r\nDM6300 set power:%x, offset:%x", (uint16_t)pwr, (uint16_t)offset);
 #endif

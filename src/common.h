@@ -13,6 +13,7 @@
 // #define HDZERO_RACE_V1
 // #define HDZERO_RACE_V2
 // #define HDZERO_FREESTYLE
+// #define FOXEER_VTX
 
 #if defined HDZERO_WHOOP
 #define VTX_ID 0x54
@@ -24,6 +25,8 @@
 #define VTX_ID 0x57
 #elif defined HDZERO_FREESTYLE
 #define VTX_ID 0x58
+#elif defined FOXEER_VTX
+#define VTX_ID 0x59
 #else
 #define VTX_ID 0x00
 #endif
@@ -38,6 +41,8 @@
 #define VTX_NAME "HDZ RACE V2"
 #elif defined HDZERO_FREESTYLE
 #define VTX_NAME "HDZ FREESTYLE"
+#elif defined FOXEER
+#define VTX_NAME "FOXEER VTX"
 #else
 #define VTX_NAME "  "
 #endif
