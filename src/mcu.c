@@ -67,7 +67,29 @@ void UART0_isr() INTERRUPT(4) {
         RS_Xbusy = 0;
     }
 }
+#ifdef USE_SMARTAUDIO_HW
+void UART1_isr() INTERRUPT(6) {
 
+    if (RI1) { // RX int
+        RI1 = 0;
+        if (sa_status == SA_ST_IDLE) {
+            uart_set_baudrate(2);
+            sa_status = SA_ST_RX;
+        }
+        if (sa_status == SA_ST_TX)
+            return;
+
+        RS_buf1[RS_in1++] = SBUF1;
+        if (RS_in1 >= BUF1_MAX)
+            RS_in1 = 0;
+    }
+
+    if (TI1) { // TX int
+        TI1 = 0;
+        RS_Xbusy1 = 0;
+    }
+}
+#else
 void UART1_isr() INTERRUPT(6) {
 
     if (RI1) { // RX int
@@ -82,6 +104,7 @@ void UART1_isr() INTERRUPT(6) {
         RS_Xbusy1 = 0;
     }
 }
+#endif
 
 void version_info(void) {
 #ifdef _DEBUG_MODE

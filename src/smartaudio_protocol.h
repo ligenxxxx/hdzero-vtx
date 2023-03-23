@@ -32,7 +32,13 @@ typedef enum {
     SA_LENGTH,
     SA_PAYLOAD,
     SA_CRC
-} SA_status_e;
+} rx_status_e;
+
+typedef enum {
+    SA_ST_IDLE,
+    SA_ST_RX,
+    SA_ST_TX,
+} sa_status_e;
 
 uint8_t SA_task();
 uint8_t SA_Process();
@@ -41,7 +47,7 @@ uint8_t pwr_to_dbm(uint8_t pwr);
 
 extern uint8_t SA_dbm;
 extern uint8_t crc8tab[256];
-extern uint8_t sa_busy;
+extern uint8_t sa_status;
 #endif // USE_SMARTAUDIO_SW
 
 #endif /* __SMARTAUDIO_PROTOCOL_H_ */

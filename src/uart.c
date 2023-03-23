@@ -1,5 +1,6 @@
 #include "uart.h"
 #include "common.h"
+#include "global.h"
 #include "hardware.h"
 #include "print.h"
 #include "smartaudio_protocol.h"
@@ -92,6 +93,7 @@ uint8_t RS_rx_len(void)
         return RS_out - RS_in;
 }
 
+#ifdef USE_SMARTAUDIO_HW
 uint8_t RS_ready1(void) {
     if (RS_in1 == RS_out1)
         return 0;
@@ -102,7 +104,6 @@ uint8_t RS_ready1(void) {
 uint8_t RS_rx1(void) {
     uint8_t ret;
     ret = RS_buf1[RS_out1];
-
     RS_out1++;
     if (RS_out1 >= BUF1_MAX)
         RS_out1 = 0;
@@ -121,6 +122,35 @@ void RS_tx1(uint8_t c) {
     }
 }
 
+#else
+uint8_t RS_ready1(void) {
+    if (RS_in1 == RS_out1)
+        return 0;
+    else
+        return 1;
+}
+
+uint8_t RS_rx1(void) {
+    uint8_t ret;
+    ret = RS_buf1[RS_out1];
+    RS_out1++;
+    if (RS_out1 >= BUF1_MAX)
+        RS_out1 = 0;
+
+    return ret;
+}
+
+void RS_tx1(uint8_t c) {
+    timer_ms10x_lst = timer_ms10x;
+    while (1) {
+        if ((!RS_Xbusy1) || (timer_ms10x - timer_ms10x_lst > 100)) {
+            SBUF1 = c;
+            RS_Xbusy1 = 1;
+            break;
+        }
+    }
+}
+#endif
 /*
 #ifdef EXTEND_BUF
 uint16_t RS_rx1_len(void)
@@ -249,20 +279,19 @@ void SUART_tx(uint8_t *tbuf, uint8_t len) {
 }
 #elif defined USE_SMARTAUDIO_HW
 uint8_t SUART_ready() {
-    if (sa_busy == 0) {
-        uart_set_baudrate(3);
-        CMS_tx('<');
-        sa_busy = 1;
-    }
-    return Mon_ready();
+    return RS_ready1();
 }
 uint8_t SUART_rx() {
-    return Mon_rx();
+    return RS_rx1();
 }
 void SUART_tx(uint8_t *tbuf, uint8_t len) {
     uint8_t i;
+    sa_status = SA_ST_TX;
     for (i = 0; i < len; i++) {
-        Mon_tx(tbuf[i]);
+        RS_tx1(tbuf[i]);
+        WAIT(2); // extern 1 stop bits
     }
+    sa_status = SA_ST_IDLE;
+    uart_set_baudrate(BAUDRATE);
 }
 #endif
