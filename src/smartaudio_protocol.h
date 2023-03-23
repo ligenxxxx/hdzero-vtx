@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
 
 #define FREQ_R1 (uint16_t)5658
 #define FREQ_R2 (uint16_t)5696
@@ -41,6 +41,6 @@ void SA_Init();
 extern uint8_t SA_dbm;
 extern uint8_t crc8tab[256];
 uint8_t pwr_to_dbm(uint8_t pwr);
-#endif // USE_SMARTAUDIO
+#endif // USE_SMARTAUDIO_SW
 
 #endif /* __SMARTAUDIO_PROTOCOL_H_ */

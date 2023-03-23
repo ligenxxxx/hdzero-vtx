@@ -78,7 +78,7 @@
 #endif
 
 #ifndef HDZERO_WHOOP
-#define USE_SMARTAUDIO
+#define USE_SMARTAUDIO_SW
 #endif
 
 #if defined(HDZERO_FREESTYLE) || defined(HDZERO_WHOOP_LITE)
@@ -100,7 +100,7 @@
 #define PRESS_LL     8
 #define PWR_LMT_SEC  10
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
 #define WAIT_SA_LOCK   4
 #define WAIT_SA_CONFIG 9
 #else
@@ -122,7 +122,7 @@
 #else
 #define LED_1 P0_2
 #endif
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
 #define SUART_PORT P0_3
 #else
 #define TC3587_RSTB P0_3

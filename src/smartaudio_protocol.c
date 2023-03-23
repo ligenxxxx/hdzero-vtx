@@ -21,7 +21,7 @@ uint8_t pwr_init = 0; // 0:POWER_MAX+2
 uint8_t ch_init = 0;  // 0~9
 uint8_t ch_bf = 0;
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
 
 uint8_t sa_rbuf[8];
 uint8_t SA_dbm = 14;

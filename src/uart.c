@@ -126,7 +126,8 @@ uint8_t RS_rx1_len(void)
 
 ////////////////////////////////////////////////////////////////////////////
 // SUART TX
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
+#ifndef SMARTAUDIO_ON_HW
 XDATA_SEG uint8_t SUART_rbuf[SUART_BUF_MAX];
 XDATA_SEG uint8_t SUART_rin = 0, SUART_rout = 0, SUART_rERR = 0;
 

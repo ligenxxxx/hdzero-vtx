@@ -28,7 +28,7 @@ BIT_TYPE int1_req = 0;
 void Timer0_isr(void) INTERRUPT(1) {
     TH0 = 138;
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
     if (SA_config) {
         if (suart_tx_en) {
             // TH0 = 139;
@@ -103,7 +103,7 @@ void main(void) {
     Init_HW(); // init
     fc_init(); // init displayport
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
     SA_Init();
 #endif
 
@@ -115,7 +115,7 @@ void main(void) {
     while (1) {
         timer_task();
 
-#ifdef USE_SMARTAUDIO
+#ifdef USE_SMARTAUDIO_SW
         while (SA_task())
             ;
 #endif
