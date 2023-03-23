@@ -3,7 +3,7 @@
 
 #include "common.h"
 
-#ifdef USE_SMARTAUDIO_SW
+#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
 
 #define FREQ_R1 (uint16_t)5658
 #define FREQ_R2 (uint16_t)5696
@@ -37,10 +37,11 @@ typedef enum {
 uint8_t SA_task();
 uint8_t SA_Process();
 void SA_Init();
+uint8_t pwr_to_dbm(uint8_t pwr);
 
 extern uint8_t SA_dbm;
 extern uint8_t crc8tab[256];
-uint8_t pwr_to_dbm(uint8_t pwr);
+extern uint8_t sa_busy;
 #endif // USE_SMARTAUDIO_SW
 
 #endif /* __SMARTAUDIO_PROTOCOL_H_ */

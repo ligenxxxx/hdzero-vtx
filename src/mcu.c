@@ -115,7 +115,7 @@ void main(void) {
     while (1) {
         timer_task();
 
-#ifdef USE_SMARTAUDIO_SW
+#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
         while (SA_task())
             ;
 #endif
@@ -126,8 +126,7 @@ void main(void) {
         Monitor();
 #endif
         video_detect();
-        if (!SA_lock)
-            OnButton1();
+        OnButton1();
 
         if ((last_SA_lock && (seconds > WAIT_SA_CONFIG)) || (last_SA_lock == 0)) {
             LED_Task();

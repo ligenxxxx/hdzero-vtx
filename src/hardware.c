@@ -1274,6 +1274,9 @@ void OnButton1() {
     static uint16_t cur_sec = 0;
     static uint8_t last_keyon = 0;
 
+    if (SA_lock)
+        return;
+
     if (cur_sec != seconds) {
         cur_sec = seconds;
 

@@ -1,5 +1,4 @@
 #include "smartaudio_protocol.h"
-
 #include "common.h"
 #include "dm6300.h"
 #include "global.h"
@@ -14,14 +13,14 @@
 #include "uart.h"
 
 uint8_t SA_lock = 0;
-uint8_t SA_config = 0;
-uint8_t SA_is_0 = 1; // detect pre hreder 0x00
 
 uint8_t pwr_init = 0; // 0:POWER_MAX+2
 uint8_t ch_init = 0;  // 0~9
 uint8_t ch_bf = 0;
 
-#ifdef USE_SMARTAUDIO_SW
+#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
+uint8_t SA_is_0 = 1; // detect pre hreder 0x00
+uint8_t SA_config = 0;
 
 uint8_t sa_rbuf[8];
 uint8_t SA_dbm = 14;
@@ -43,6 +42,8 @@ uint8_t mode_p = 0x05;
 uint8_t freq_new_h = 0x16;
 uint8_t freq_new_l = 0x1a;
 uint16_t freq = 0x161a;
+
+uint8_t sa_busy = 0;
 
 uint8_t dbm_to_pwr(uint8_t dbm) {
     if (dbm == 0)
@@ -405,8 +406,8 @@ void SA_Update(uint8_t cmd) {
     }
     //_outchar('_');
 }
-
-uint8_t SA_task() {
+#if defined USE_SMARTAUDIO_SW
+uint8_t SA_task(void) {
     static uint8_t SA_state = 0, SA = 0xFF;
 
     if (SA_state == 0) { // monitor SA pin
@@ -435,6 +436,11 @@ uint8_t SA_task() {
     }
     return SA_state;
 }
+#elif defined USE_SMARTAUDIO_HW
+uint8_t SA_task(void) {
+    return 1 - SA_Process();
+}
+#endif
 
 uint8_t SA_Process() {
     static uint8_t rx = 0;
@@ -447,6 +453,7 @@ uint8_t SA_Process() {
 
     if (SUART_ready()) {
         rx = SUART_rx();
+        CMS_tx(rx);
 #ifdef _DEBUG_SMARTAUDIO
 // debugf("%x ", (uint16_t)rx);
 #endif

@@ -30,10 +30,20 @@ volatile BIT_TYPE RS_Xbusy1 = 0;
 void uart_set_baudrate(uint8_t baudIndex) {
     switch (baudIndex) {
     case 0: // 115200
+        CKCON = 0x1F;
         TH1 = 0xEC;
         break;
-    case 1:
+    case 1: // 230400
+        CKCON = 0x1F;
         TH1 = 0xF6;
+        break;
+    case 2: // 9600
+        CKCON = 0x1F;
+        TH1 = 0x0E;
+        break;
+    case 3: // 4800
+        CKCON = 0x0F;
+        TH1 = 0x5F;
         break;
     }
 #ifdef _DEBUG_MODE
@@ -127,7 +137,6 @@ uint8_t RS_rx1_len(void)
 ////////////////////////////////////////////////////////////////////////////
 // SUART TX
 #ifdef USE_SMARTAUDIO_SW
-#ifndef SMARTAUDIO_ON_HW
 XDATA_SEG uint8_t SUART_rbuf[SUART_BUF_MAX];
 XDATA_SEG uint8_t SUART_rin = 0, SUART_rout = 0, SUART_rERR = 0;
 
@@ -236,6 +245,24 @@ void SUART_tx(uint8_t *tbuf, uint8_t len) {
         SUART_tx_byte(tbuf[i]);
         while (suart_tx_en)
             ;
+    }
+}
+#elif defined USE_SMARTAUDIO_HW
+uint8_t SUART_ready() {
+    if (sa_busy == 0) {
+        uart_set_baudrate(3);
+        CMS_tx('<');
+        sa_busy = 1;
+    }
+    return Mon_ready();
+}
+uint8_t SUART_rx() {
+    return Mon_rx();
+}
+void SUART_tx(uint8_t *tbuf, uint8_t len) {
+    uint8_t i;
+    for (i = 0; i < len; i++) {
+        Mon_tx(tbuf[i]);
     }
 }
 #endif

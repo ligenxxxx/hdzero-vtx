@@ -73,6 +73,11 @@ uint8_t SUART_rx();
 void SUART_tx(uint8_t *tbuf, uint8_t len);
 extern uint8_t SA_is_0;
 extern uint8_t SA_config;
-#endif // USE_SMARTAUDIO_SW
+
+#elif defined USE_SMARTAUDIO_HW
+uint8_t SUART_ready();
+uint8_t SUART_rx();
+void SUART_tx(uint8_t *tbuf, uint8_t len);
+#endif
 
 #endif /* __UART_H_ */
