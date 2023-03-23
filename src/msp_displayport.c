@@ -185,7 +185,7 @@ void msp_task() {
         if (msp_tx_cnt <= 8)
             msp_tx_cnt++;
         else
-            ; // msp_cmd_tx();
+            msp_cmd_tx();
     }
 
     // set_vtx
@@ -300,9 +300,9 @@ uint8_t msp_read_one_frame() {
                     fc_lock |= FC_INIT_VTX_TABLE_LOCK;
                     if (msp_cmp_fc_variant("BTFL") || msp_cmp_fc_variant("QUIC")) {
 #ifdef INIT_VTX_TABLE
-                        // InitVtxTable();
+                        InitVtxTable();
 #endif
-                        ; // msp_set_osd_canvas();
+                        msp_set_osd_canvas();
                     }
                 }
             }
@@ -713,7 +713,6 @@ void msp_set_vtx_config(uint8_t power, uint8_t save) {
     uint8_t channel = 0;
     uint8_t band;
 
-    return;
     if (RF_FREQ < 8) {
         band = 5;
         channel = RF_FREQ;

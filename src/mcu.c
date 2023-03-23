@@ -132,7 +132,7 @@ void main(void) {
             LED_Task();
             TempDetect(); // temperature dectect
             PwrLMT();     // RF power ctrl
-            msp_task();   // msp displayport process
+            // msp_task();
             Update_EEP_LifeTime();
             uart_baudrate_detect();
         }
