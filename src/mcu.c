@@ -139,16 +139,14 @@ void main(void) {
     while (1) {
         timer_task();
 
-#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
+#if defined USE_SMARTAUDIO_SW
         while (SA_task())
-#ifdef USE_SMARTAUDIO_HW
-        {
+            ;
+#elif defined USE_SMARTAUDIO_HW
+        while (SA_task()) {
             if (SA_timeout())
                 break;
         }
-#else
-            ;
-#endif
 #endif
 
 #ifdef _RF_CALIB
