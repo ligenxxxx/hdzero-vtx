@@ -449,7 +449,7 @@ void Init_HW() {
     Init_6300RF(RF_FREQ, RF_POWER);
     DM6300_AUXADC_Calib();
 #else
-#ifdef HDZERO_FREESTYLE
+#ifdef USE_TC3587_LED
     LED_TC3587_Init();
 #endif
     GetVtxParameter();

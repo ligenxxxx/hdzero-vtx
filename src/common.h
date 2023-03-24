@@ -25,6 +25,8 @@
 #define VTX_ID 0x57
 #elif defined HDZERO_FREESTYLE
 #define VTX_ID 0x58
+#elif defined HDZERO_RACE_V3
+#define VTX_ID 0x59
 #else
 #define VTX_ID 0x00
 #endif
@@ -40,6 +42,8 @@
 #define VTX_NAME "HDZ RACE V2"
 #elif defined HDZERO_FREESTYLE
 #define VTX_NAME "HDZ FREESTYLE"
+#elif defined HDZERO_RACE_V3
+#define VTX_NAME "HDZ RACE V3"
 #else
 #define VTX_NAME "  "
 #endif
@@ -55,7 +59,6 @@
 // #define _RF_CALIB
 // #define REV_UART
 // #define VIDEO_PAT
-
 // #define FIX_EEP
 
 #ifndef _RF_CALIB
@@ -77,16 +80,7 @@
 #define USE_MSP
 #endif
 
-#ifndef HDZERO_WHOOP
-#define USE_SMARTAUDIO_HW
-#endif
-
-#if defined(HDZERO_FREESTYLE) || defined(HDZERO_WHOOP_LITE)
-#define USE_TEMPERATURE_SENSOR
-#endif
-
 #define INIT_VTX_TABLE
-
 #define IS_RX 0
 
 // time
@@ -100,7 +94,7 @@
 #define PRESS_LL     8
 #define PWR_LMT_SEC  10
 
-#if defined USE_SMARTAUDIO_SW || define USE_SMARTAUDIO_HW
+#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
 #define WAIT_SA_LOCK   4
 #define WAIT_SA_CONFIG 9
 #else
@@ -117,14 +111,14 @@
 #define SDA     P0_1
 #define CAM_SCL P0_0
 #define CAM_SDA P0_1
-#ifdef HDZERO_FREESTYLE
+#ifdef USE_PA_EN
 #define PA_EN P0_2
-#else
+#elif !defined USE_TC3587_LED
 #define LED_1 P0_2
 #endif
-#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
+#if defined USE_SMARTAUDIO_SW
 #define SUART_PORT P0_3
-#else
+#elif defined USE_TC3587_RSTB
 #define TC3587_RSTB P0_3
 #endif
 #define CAM_PWM P0_4
