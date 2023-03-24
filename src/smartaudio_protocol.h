@@ -44,10 +44,12 @@ uint8_t SA_task();
 uint8_t SA_Process();
 void SA_Init();
 uint8_t pwr_to_dbm(uint8_t pwr);
+uint8_t SA_timeout(void);
 
 extern uint8_t SA_dbm;
 extern uint8_t crc8tab[256];
 extern uint8_t sa_status;
+extern uint32_t sa_start_ms;
 #endif // USE_SMARTAUDIO_SW
 
 #endif /* __SMARTAUDIO_PROTOCOL_H_ */

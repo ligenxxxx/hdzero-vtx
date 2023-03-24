@@ -60,7 +60,6 @@ extern XDATA_SEG volatile uint8_t RS_out1;
 #endif
 
 #ifdef USE_SMARTAUDIO_SW
-
 #define SUART_BUF_MAX 32 // has to be power of 2
 
 extern uint8_t suart_tx_en;

@@ -44,6 +44,7 @@ uint8_t freq_new_l = 0x1a;
 uint16_t freq = 0x161a;
 
 uint8_t sa_status = SA_ST_IDLE;
+uint32_t sa_start_ms = 0;
 
 uint8_t dbm_to_pwr(uint8_t dbm) {
     if (dbm == 0)
@@ -438,6 +439,14 @@ uint8_t SA_task(void) {
 #elif defined USE_SMARTAUDIO_HW
 uint8_t SA_task(void) {
     return 1 - SA_Process();
+}
+uint8_t SA_timeout(void) {
+    if (timer_ms10x - sa_start_ms > 5000) {
+        uart_set_baudrate(BAUDRATE);
+        sa_status = SA_ST_IDLE;
+        return 1;
+    }
+    return 0;
 }
 #endif
 

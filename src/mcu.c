@@ -73,8 +73,9 @@ void UART1_isr() INTERRUPT(6) {
     if (RI1) { // RX int
         RI1 = 0;
         if (sa_status == SA_ST_IDLE) {
-            uart_set_baudrate(2);
+            uart_set_baudrate(3);
             sa_status = SA_ST_RX;
+            sa_start_ms = timer_ms10x;
         }
         if (sa_status == SA_ST_TX)
             return;
@@ -140,7 +141,14 @@ void main(void) {
 
 #if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
         while (SA_task())
+#ifdef USE_SMARTAUDIO_HW
+        {
+            if (SA_timeout())
+                break;
+        }
+#else
             ;
+#endif
 #endif
 
 #ifdef _RF_CALIB
