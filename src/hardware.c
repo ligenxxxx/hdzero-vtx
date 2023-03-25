@@ -346,7 +346,7 @@ void GetVtxParameter() {
 #endif
 
 // last_SA_lock
-#ifdef USE_SMARTAUDIO_SW
+#if defined USE_SMARTAUDIO_SW || defined USE_SMARTAUDIO_HW
         last_SA_lock = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_SA_LOCK);
         WAIT(10);
         if (last_SA_lock == 0xff) {
