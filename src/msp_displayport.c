@@ -1518,7 +1518,7 @@ void update_cms_menu(uint16_t roll, uint16_t pitch, uint16_t yaw, uint16_t throt
         else
             cms_state = CMS_OSD;
 
-        if (cms_cnt == 5) {
+        if (cms_cnt == 40) {
             cms_cnt = 0;
             disp_mode = DISPLAY_CMS;
             clear_screen();
