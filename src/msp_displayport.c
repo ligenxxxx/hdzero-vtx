@@ -1685,11 +1685,33 @@ void vtx_menu_init() {
 
     for (j = 0; j < FREQ_NUM_INTERNAL; j++) {
         for (i = 0; i <= POWER_MAX; i++) {
-            reg_val = I2C_Read8(ADDR_EEPROM, j * (POWER_MAX + 1) + i);
+            reg_val = table_power_test[j][i];
             uint8ToString(reg_val, val_str);
             strcpy(osd_buf[j] + osd_menu_offset + 2 + i * 4, val_str);
         }
     }
+
+    reg_val = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_LOWBAND_LOCK);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[8] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_RF_FREQ);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[9] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_RF_POWER);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[10] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_LPMODE);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[11] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_PITMODE);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[12] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_25MW);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[13] + osd_menu_offset + 2 + 0, val_str);
+    reg_val = I2C_Read8(ADDR_EEPROM, EEP_ADDR_TEAM_RACE);
+    uint8ToString(reg_val, val_str);
+    strcpy(osd_buf[14] + osd_menu_offset + 2 + 0, val_str);
 }
 
 void update_vtx_menu_param(uint8_t state) {

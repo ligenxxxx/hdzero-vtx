@@ -51,6 +51,32 @@ uint8_t table_power[FREQ_NUM_EXTERNAL][POWER_MAX + 1] = {
     {0x70, 0x68, 0x5c, 0x60},
     {0x70, 0x68, 0x5c, 0x60},
 };
+uint8_t table_power_test[FREQ_NUM_EXTERNAL][POWER_MAX + 1] = {
+    // race band
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    {1, 1, 1, 1},
+    // e band
+    {0x70, 0x68, 0x5c, 0x60}, // E1
+    // fatshark band
+    {0x70, 0x68, 0x60, 0x60}, // F1
+    {0x72, 0x6d, 0x60, 0x60}, // F2
+    {0x74, 0x70, 0x62, 0x5c}, // F4
+    // low band
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+    {0x70, 0x68, 0x5c, 0x60},
+};
 #else
 uint8_t table_power[FREQ_NUM_EXTERNAL][POWER_MAX + 1] = {
     // race band
@@ -77,6 +103,33 @@ uint8_t table_power[FREQ_NUM_EXTERNAL][POWER_MAX + 1] = {
     {0x79, 0x83},
     {0x79, 0x83},
     {0x79, 0x83},
+};
+uint8_t table_power_test[FREQ_NUM_EXTERNAL][POWER_MAX + 1] = {
+
+    // race band
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    // e band
+    {1, 1}, // E1
+    // fatshark band
+    {1, 1}, // F1
+    {1, 1}, // F2
+    {1, 1}, // F4
+    // low band
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
+    {1, 1},
 };
 #endif
 
@@ -321,7 +374,7 @@ void DM6300_SetPower(uint8_t pwr, uint8_t freq, uint8_t offset) {
 
     if (pwr == POWER_MAX + 1) {
         SPI_Write(0x3, 0x330, 0x21F);
-        SPI_Write(0x3, 0xD1C, PIT_POWER);
+        SPI_Write(0x3, 0xD1C, 121);
     } else {
         SPI_Write(0x3, 0x330, a_tab[pwr]);
 
@@ -343,6 +396,7 @@ void DM6300_SetPower(uint8_t pwr, uint8_t freq, uint8_t offset) {
             p = 255;
         else if (p < 0)
             p = 0;
+        p = 121;
         SPI_Write(0x3, 0xD1C, (uint8_t)p);
     }
 }

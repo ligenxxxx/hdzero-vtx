@@ -391,7 +391,7 @@ void GetVtxParameter() {
     uint8_t tab_min[4] = {255, 255, 255, 255};
 
     EE_VALID = !I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_EEP_VLD, 0xFF);
-    EE_VALID = 0;
+    WAIT(1000);
 #ifdef _DEBUG_MODE
     debugf("\r\nEE_VALID:%x", (uint16_t)EE_VALID);
 #endif
@@ -431,18 +431,18 @@ void GetVtxParameter() {
             }
         }
 
-        if (ee_vld) {
+        if (1) {
 #ifdef _DEBUG_MODE
             debugf("\r\nUSE EEPROM for rf_pwr_tab.");
 #endif
             for (i = 0; i < FREQ_NUM_EXTERNAL; i++) {
                 for (j = 0; j <= POWER_MAX; j++) {
-                    table_power[i][j] = tab[i][j];
+                    table_power_test[i][j] = tab[i][j];
 #ifndef _RF_CALIB
 #if defined HDZERO_FREESTYLE_V1 || HDZERO_FREESTYLE_V2
 #else
                     if (j == 0) // 25mw +3dbm
-                        table_power[i][j] += 0xC;
+                        table_power_test[i][j] += 0xC;
 #endif
 #endif
                 }
