@@ -1247,6 +1247,9 @@ uint8_t parse_displayport(uint8_t len) {
 }
 
 void update_cms_menu(uint16_t roll, uint16_t pitch, uint16_t yaw, uint16_t throttle) {
+#if (1)
+    vtx_menu_init();
+#else
     /*
      *                throttle(油门) +                                          pitch(俯仰) +
      *
@@ -1664,6 +1667,7 @@ void update_cms_menu(uint16_t roll, uint16_t pitch, uint16_t yaw, uint16_t throt
     }
     } // switch
     last_mid = mid;
+#endif
 }
 
 void vtx_menu_init() {
@@ -1680,8 +1684,8 @@ void vtx_menu_init() {
     clear_screen();
 
     for (j = 0; j < FREQ_NUM_INTERNAL; j++) {
-        for (i = 0; i < POWER_MAX; i++) {
-            reg_val = I2C_Read8(ADDR_EEPROM, j * POWER_MAX + i);
+        for (i = 0; i <= POWER_MAX; i++) {
+            reg_val = I2C_Read8(ADDR_EEPROM, j * (POWER_MAX + 1) + i);
             uint8ToString(reg_val, val_str);
             strcpy(osd_buf[j] + osd_menu_offset + 2 + i * 4, val_str);
         }
