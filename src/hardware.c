@@ -391,7 +391,7 @@ void GetVtxParameter() {
     uint8_t tab_min[4] = {255, 255, 255, 255};
 
     EE_VALID = !I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_EEP_VLD, 0xFF);
-
+    EE_VALID = 0;
 #ifdef _DEBUG_MODE
     debugf("\r\nEE_VALID:%x", (uint16_t)EE_VALID);
 #endif
