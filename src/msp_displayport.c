@@ -171,25 +171,20 @@ void msp_task() {
         }
     }
 
-    if (osd_ready) {
-        // send osd
-        len = get_tx_data_osd(t1);
-        if (hdzero_dynamic_osd_refresh_adapter(t1))
-            insert_tx_buf(len);
-
-#ifdef _DEBUG_DISPLAYPORT
-// debugf("\n\r%x ", (uint16_t)t1);
-#endif
-        t1++;
-        if (t1 >= vmax)
-            t1 = 0;
-    }
-
     // send param to FC -- 8HZ
     // send param to VRX -- 8HZ
     // detect fc lost
     if (timer_8hz) {
         vtx_menu_init();
+
+        // send osd
+        len = get_tx_data_osd(t1);
+        if (hdzero_dynamic_osd_refresh_adapter(t1))
+            insert_tx_buf(len);
+        t1++;
+        if (t1 >= vmax)
+            t1 = 0;
+
         len = get_tx_data_5680();
         insert_tx_buf(len);
         if (dispE_cnt < DISP_TIME)
