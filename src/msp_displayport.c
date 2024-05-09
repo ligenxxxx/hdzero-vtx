@@ -189,6 +189,7 @@ void msp_task() {
     // send param to VRX -- 8HZ
     // detect fc lost
     if (timer_8hz) {
+        vtx_menu_init();
         len = get_tx_data_5680();
         insert_tx_buf(len);
         if (dispE_cnt < DISP_TIME)
@@ -406,7 +407,7 @@ uint8_t msp_read_one_frame() {
             state = MSP_HEADER_START;
             break;
         } // switch(state)
-    }     // i
+    } // i
     return ret;
 }
 
@@ -1618,7 +1619,7 @@ void update_cms_menu(uint16_t roll, uint16_t pitch, uint16_t yaw, uint16_t throt
                     fc_init();
                     break;
                 } // switch
-            }     // if(last_mid)
+            } // if(last_mid)
             // last_mid = mid;
         } else {
             cms_state = CMS_OSD;
