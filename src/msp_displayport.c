@@ -93,7 +93,7 @@ uint32_t fc_lst_rcv_sec = 0;
 
 uint8_t boot_0mw_done = 0;
 
-uint8_t msp_tx_en = 0;
+uint8_t msp_tx_en = 1;
 
 #ifdef USE_MSP
 void msp_set_osd_canvas(void);
@@ -406,7 +406,7 @@ uint8_t msp_read_one_frame() {
             state = MSP_HEADER_START;
             break;
         } // switch(state)
-    }     // i
+    } // i
     return ret;
 }
 
@@ -1079,7 +1079,7 @@ void parseMspVtx_V2(uint16_t const cmd_u16) {
             else
 #endif
 #endif
-            if (nxt_pwr == POWER_MAX + 1) {
+                if (nxt_pwr == POWER_MAX + 1) {
                 WriteReg(0, 0x8F, 0x10);
                 dm6300_init_done = 0;
                 cur_pwr = POWER_MAX + 2;
@@ -1615,7 +1615,7 @@ void update_cms_menu(uint16_t roll, uint16_t pitch, uint16_t yaw, uint16_t throt
                     fc_init();
                     break;
                 } // switch
-            }     // if(last_mid)
+            } // if(last_mid)
             // last_mid = mid;
         } else {
             cms_state = CMS_OSD;
