@@ -1170,7 +1170,8 @@ void DM6300_EFUSE2() {
     // uint32_t wdat;
     uint32_t ef_data;
     uint8_t version[5];
-    uint32_t rdat;
+    uint32_t rdat_8;
+    uint32_t rdat_32;
 
     version[4] = 0;
     for (i = 0; i < 4; i++) {
@@ -1253,29 +1254,51 @@ void DM6300_EFUSE2() {
             dcoc_qh = efuse.macro.m2[i].tx1.dcoc_q & 0xFFFF0000;
 
             if (EE_VALID) {
-                rdat = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_EN);
-                if ((rdat & 0xFF) == 0) {
+                rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_EN);
+                if (rdat_8 != 0) {
+                    I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_EN, 0);
+                    rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_EN);
+                }
+                if ((rdat_8 & 0xFF) == 0) {
 #ifdef _DEBUG_DM6300
                     debugf("\r\nDCOC read from EEPROM:");
 #endif
                     SPI_Write(0x6, 0xFF0, 0x00000018);
 
-                    rdat = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IH);
-                    rdat <<= 8;
-                    rdat |= I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IL);
-                    rdat |= dcoc_ih;
-                    SPI_Write(0x3, 0x380, rdat);
+                    rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IH);
+                    if (rdat_8 == 0x00 || rdat_8 == 0xff) {
+                        I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IH, 0x80);
+                    }
+                    rdat_32 = (rdat_8 << 8);
+
+                    rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IL);
+                    if (rdat_8 == 0x00 || rdat_8 == 0xff) {
+                        I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_IL, 0x80);
+                    }
+                    rdat_32 |= rdat_8;
+
+                    rdat_32 |= dcoc_ih;
+                    SPI_Write(0x3, 0x380, rdat_32);
 #ifdef _DEBUG_DM6300
-                    debugf("\r\ndcoc_i=%lx", rdat);
+                    debugf("\r\ndcoc_i=%lx", rdat_32);
 #endif
 
-                    rdat = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QH);
-                    rdat <<= 8;
-                    rdat |= I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QL);
-                    rdat |= dcoc_qh;
-                    SPI_Write(0x3, 0x388, rdat);
+                    rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QH);
+                    if (rdat_8 == 0x00 || rdat_8 == 0xff) {
+                        I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QH, 0x80);
+                    }
+                    rdat_32 = (rdat_8 << 8);
+
+                    rdat_8 = I2C_Read8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QL);
+                    if (rdat_8 == 0x00 || rdat_8 == 0xff) {
+                        I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_DCOC_QL, 0x80);
+                    }
+                    rdat_32 |= rdat_8;
+
+                    rdat_32 |= dcoc_qh;
+                    SPI_Write(0x3, 0x388, rdat_32);
 #ifdef _DEBUG_DM6300
-                    debugf("\r\ndcoc_q=%lx", rdat);
+                    debugf("\r\ndcoc_q=%lx", rdat_32);
 #endif
                 }
             }
