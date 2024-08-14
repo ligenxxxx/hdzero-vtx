@@ -15,12 +15,12 @@
 #define CAMERA_SETTING_NUM 16
 #define CAMERA_PROFILE_NUM 3
 
-#define camera_button_enter WriteReg(0, 0x14, 0x32)
-#define camera_button_right WriteReg(0, 0x14, 0x58)
-#define camera_button_down  WriteReg(0, 0x14, 0x64)
-#define camera_button_left  WriteReg(0, 0x14, 0x3F)
-#define camera_button_up    WriteReg(0, 0x14, 0x4B)
-#define camera_button_mid   WriteReg(0, 0x14, 0x00)
+#define camera_button_enter WriteReg(0, 0x14, 66)  // 50  -> 1.6v ||  66  -> 1.11v
+#define camera_button_right WriteReg(0, 0x14, 89)  // 88  -> 0.4v ||  89  -> 0.36v
+#define camera_button_down  WriteReg(0, 0x14, 100) // 100 -> 0.0v ||  100 -> 0.00v
+#define camera_button_left  WriteReg(0, 0x14, 72)  // 63  -> 1.2v ||  73  -> 0.89v
+#define camera_button_up    WriteReg(0, 0x14, 80)  // 75  -> 0.8v ||  81  -> 0.63v
+#define camera_button_mid   WriteReg(0, 0x14, 4)   // 0   -> 3.3v ||  4   -> 3.18v
 
 typedef enum {
     CAMERA_MFR_UNKNOW,
