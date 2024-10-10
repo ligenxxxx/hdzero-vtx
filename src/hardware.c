@@ -372,7 +372,7 @@ void Setting_Save() {
 }
 
 void CFG_Back() {
-    RF_FREQ = 1; //(RF_FREQ >= FREQ_NUM) ? 0 : RF_FREQ;
+    RF_FREQ = 0; //(RF_FREQ >= FREQ_NUM) ? 0 : RF_FREQ;
     RF_POWER = (RF_POWER > POWER_MAX) ? 0 : RF_POWER;
     LP_MODE = (LP_MODE > 2) ? 0 : LP_MODE;
     PIT_MODE = (PIT_MODE > PIT_0MW) ? PIT_OFF : PIT_MODE;
