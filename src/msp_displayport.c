@@ -49,6 +49,7 @@ uint8_t fc_lp_rx = 0;
 
 uint8_t g_IS_ARMED = 0;
 uint8_t g_IS_PARALYZE = 0;
+uint8_t g_camera_sel = 255;
 
 uint8_t pit_mode_cfg_done = 0;
 uint8_t lp_mode_cfg_done = 0;
@@ -952,6 +953,18 @@ void msp_set_vtx_config(uint8_t power, uint8_t save) {
         msp_eeprom_write();
 }
 
+void camera_switch(uint8_t cam_sel) {
+    static uint8_t cam_sel_last = 0xff;
+
+    if ((cam_sel_last == cam_sel) && (cam_sel != g_camera_sel)) {
+        g_camera_sel = cam_sel;
+        pca9570_set(0x02 | (g_camera_sel & 1));
+        if (g_camera_sel)
+            vtx_paralized();
+    }
+    cam_sel_last = cam_sel;
+}
+
 void parse_status() {
 
     fc_lock |= FC_STATUS_LOCK;
@@ -964,6 +977,7 @@ void parse_status() {
         vtx_paralized();
     }
 #endif
+    camera_switch((msp_rx_buf[7] >> 2) & 1);
 }
 
 void parse_variant() {
