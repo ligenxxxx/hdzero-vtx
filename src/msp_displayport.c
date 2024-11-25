@@ -977,7 +977,12 @@ void parse_status() {
         vtx_paralized();
     }
 #endif
+
+#if (0)
     camera_switch((msp_rx_buf[7] >> 2) & 1);
+#else
+    pca9570_set(0x02 | g_IS_ARMED);
+#endif
 }
 
 void parse_variant() {
