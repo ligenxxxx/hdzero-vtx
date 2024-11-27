@@ -976,7 +976,7 @@ void parse_status() {
     }
 #endif
 
-    // camera_switch((msp_rx_buf[7] >> 2) & 1);
+    camera_switch((msp_rx_buf[7] >> 4) & 1); // camera control 1 flag
 }
 
 void parse_variant() {
@@ -1001,7 +1001,6 @@ void parse_rc() {
     aux1 = (msp_rx_buf[9] << 8) | msp_rx_buf[8];
 
     update_cms_menu(roll, pitch, yaw, throttle);
-    camera_switch(aux1 > 1500);
 }
 
 uint8_t msp_vtx_set_channel(uint8_t const channel) {
