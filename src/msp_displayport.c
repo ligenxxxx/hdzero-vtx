@@ -976,7 +976,6 @@ void parse_status() {
     }
 #endif
 
-    camera_switch(g_IS_ARMED);
     // camera_switch((msp_rx_buf[7] >> 2) & 1);
 }
 
@@ -991,6 +990,7 @@ void parse_variant() {
 
 void parse_rc() {
     uint16_t roll, pitch, yaw, throttle;
+    uint16_t aux1;
 
     fc_lock |= FC_RC_LOCK;
 
@@ -998,8 +998,10 @@ void parse_rc() {
     pitch = (msp_rx_buf[3] << 8) | msp_rx_buf[2];
     yaw = (msp_rx_buf[5] << 8) | msp_rx_buf[4];
     throttle = (msp_rx_buf[7] << 8) | msp_rx_buf[6];
+    aux1 = (msp_rx_buf[9] << 8) | msp_rx_buf[8];
 
     update_cms_menu(roll, pitch, yaw, throttle);
+    camera_switch(aux1 > 1500);
 }
 
 uint8_t msp_vtx_set_channel(uint8_t const channel) {
