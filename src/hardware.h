@@ -38,6 +38,7 @@ typedef enum {
 #define EEP_ADDR_LOWBAND_LOCK 0x8C
 #define EEP_ADDR_SHORTCUT     0x8D
 #define EEP_ADDR_CAM_RATIO    0x8E
+#define EEP_ADDR_CAM_SWITCH   0x8F
 #define EEP_ADDR_TAB3         0xA0 // 0xA0 - 0xBF
 #define EEP_ADDR_DCOC1        0xC0 // 0xC0 - 0xC4
 #define EEP_ADDR_DCOC_EN      0xC0
@@ -124,6 +125,7 @@ extern uint8_t RF_BW;
 extern uint8_t RF_BW_last;
 extern uint8_t BAUDRATE;
 extern uint8_t SHORTCUT;
+extern uint8_t CAM_SWITCH;
 
 extern uint8_t cameraLost;
 extern uint8_t pwr_offset;

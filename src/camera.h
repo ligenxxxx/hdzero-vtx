@@ -98,6 +98,7 @@ void camera_select_menu_init(void);
 void camera_select_menu_cursor_update(uint8_t index);
 void camera_select_menu_ratio_upate();
 void camera_menu_mode_exit_note();
+void camera_switch(uint8_t index);
 
 extern uint8_t camRatio;
 extern uint8_t video_format;

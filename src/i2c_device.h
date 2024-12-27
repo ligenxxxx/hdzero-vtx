@@ -5,6 +5,7 @@
 
 #define ADDR_MAX7315 0x20 // Rev1 Rev3
 #define ADDR_PCA9554 0x38 // Rev2
+#define ADDR_PCA9557 0x18
 
 #define ADDR_TP9950  0x44
 #define ADDR_TC3587  0x0E

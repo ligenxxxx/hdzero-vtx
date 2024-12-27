@@ -232,7 +232,6 @@ void camera_mode_detect(uint8_t init) {
 
         if (cycles == 0) {
             Set_720P60(0);
-            WriteReg(0, 0x50, 0x01);
             video_format = VDO_FMT_720P60;
             I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
             camera_type = CAMERA_TYPE_RESERVED;
@@ -373,6 +372,7 @@ uint8_t camera_set(uint8_t *camera_setting_reg, uint8_t save, uint8_t init) {
 }
 
 void camera_init(void) {
+    camera_switch(CAM_SWITCH);
     camera_type_detect();
     camera_setting_read();
     camera_setting_reg_menu_update();
@@ -915,4 +915,17 @@ void camera_select_menu_ratio_upate() {
 void camera_menu_mode_exit_note() {
     const char note_string[] = "LEFT MOVE THROTTLE TO EXIT CAMERA MENU";
     strcpy(osd_buf[15] + 5, note_string);
+}
+
+void camera_switch(uint8_t index) {
+    uint8_t reg[3] = {0x03, 0x02, 0x01};
+
+    if (index == 0)
+        return;
+
+    index -= 1;
+
+    I2C_Write8(ADDR_PCA9557, 0x03, 0x00);
+    // I2C_Write8(ADDR_PCA9557, 0x01, 0xff);
+    I2C_Write8(ADDR_PCA9557, 0x01, reg[index]);
 }
