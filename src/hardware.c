@@ -46,7 +46,7 @@ uint8_t OFFSET_25MW = 0; // 0~10 -> 0~10    11~20 -> -1~-10
 uint8_t TEAM_RACE = 0;
 uint8_t BAUDRATE = 0;
 uint8_t SHORTCUT = 0;
-uint8_t CAM_SWITCH = 0;
+uint8_t CAM_SWITCH_AUX = 0;
 
 uint8_t RF_BW = BW_27M;
 uint8_t RF_BW_last = BW_27M;
@@ -356,7 +356,7 @@ void Setting_Save() {
         err |= I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_25MW, OFFSET_25MW);
         err |= I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_TEAM_RACE, TEAM_RACE);
         err |= I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_SHORTCUT, SHORTCUT);
-        err |= I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_CAM_SWITCH, CAM_SWITCH);
+        err |= I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_CAM_SWITCH, CAM_SWITCH_AUX);
     }
 }
 
@@ -368,7 +368,7 @@ void CFG_Back() {
     OFFSET_25MW = (OFFSET_25MW > 20) ? 0 : OFFSET_25MW;
     TEAM_RACE = (TEAM_RACE > 2) ? 0 : TEAM_RACE;
     SHORTCUT = (SHORTCUT > 1) ? 0 : SHORTCUT;
-    CAM_SWITCH = (CAM_SWITCH > 12) ? 0 : CAM_SWITCH;
+    CAM_SWITCH_AUX = (CAM_SWITCH_AUX > 12) ? 0 : CAM_SWITCH_AUX;
 }
 
 void GetVtxParameter() {
@@ -449,7 +449,7 @@ void GetVtxParameter() {
         OFFSET_25MW = I2C_Read8(ADDR_EEPROM, EEP_ADDR_25MW);
         TEAM_RACE = I2C_Read8(ADDR_EEPROM, EEP_ADDR_TEAM_RACE);
         SHORTCUT = I2C_Read8(ADDR_EEPROM, EEP_ADDR_SHORTCUT);
-        CAM_SWITCH = I2C_Read8(ADDR_EEPROM, EEP_ADDR_CAM_SWITCH);
+        CAM_SWITCH_AUX = I2C_Read8(ADDR_EEPROM, EEP_ADDR_CAM_SWITCH);
         CFG_Back();
 
 // last_SA_lock
@@ -521,6 +521,7 @@ void Init_HW() {
 
     GetVtxParameter();
     Get_EEP_LifeTime();
+    camera_switch(0);
     camera_init();
 #ifdef _RF_CALIB
     RF_POWER = 0; // max power
@@ -1560,7 +1561,7 @@ void reset_config() {
     I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_TEAM_RACE, TEAM_RACE);
     I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_BAUDRATE, BAUDRATE);
     I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_SHORTCUT, SHORTCUT);
-    I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_CAM_SWITCH, CAM_SWITCH);
+    I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_CAM_SWITCH, CAM_SWITCH_AUX);
 
     I2C_Write8_Wait(10, ADDR_EEPROM, EEP_ADDR_CAM_TYPE, 0);
 }

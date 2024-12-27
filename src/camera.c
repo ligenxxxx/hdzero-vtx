@@ -372,7 +372,6 @@ uint8_t camera_set(uint8_t *camera_setting_reg, uint8_t save, uint8_t init) {
 }
 
 void camera_init(void) {
-    camera_switch(CAM_SWITCH);
     camera_type_detect();
     camera_setting_read();
     camera_setting_reg_menu_update();
@@ -919,11 +918,6 @@ void camera_menu_mode_exit_note() {
 
 void camera_switch(uint8_t index) {
     uint8_t reg[3] = {0x03, 0x02, 0x01};
-
-    if (index == 0)
-        return;
-
-    index -= 1;
 
     I2C_Write8(ADDR_PCA9557, 0x03, 0x00);
     // I2C_Write8(ADDR_PCA9557, 0x01, 0xff);

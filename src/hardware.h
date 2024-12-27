@@ -125,7 +125,7 @@ extern uint8_t RF_BW;
 extern uint8_t RF_BW_last;
 extern uint8_t BAUDRATE;
 extern uint8_t SHORTCUT;
-extern uint8_t CAM_SWITCH;
+extern uint8_t CAM_SWITCH_AUX;
 
 extern uint8_t cameraLost;
 extern uint8_t pwr_offset;

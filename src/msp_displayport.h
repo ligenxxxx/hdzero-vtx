@@ -101,6 +101,7 @@ typedef enum {
 } cms_state_e;
 
 typedef enum {
+    VTX_MENU_TITLE = 0,
     VTX_MENU_CHANNEL,
     VTX_MENU_POWER,
     VTX_MENU_LP_MODE,
@@ -108,8 +109,15 @@ typedef enum {
     VTX_MENU_OFFSET_25MW,
     VTX_MENU_TEAM_RACE,
     VTX_MENU_SHORTCUT,
+    VTX_MENU_CAM_SWITCH,
     VTX_MENU_EXIT,
     VTX_MENU_SAVE_EXIT,
+    VTX_MENU_INFO,
+    VTX_MENU_NAME,
+    VTX_MENU_VER,
+    VTX_MENU_LIFETIME,
+    VTX_MENU_TEMPERATURE,
+    VTX_MENU_END,
 } vtx_menu_state_e;
 
 typedef enum {
@@ -150,6 +158,7 @@ void msp_set_vtx_config(uint8_t power, uint8_t save);
 void set_vtx_param();
 uint8_t channel_to_bfChannel(uint8_t const channel);
 uint8_t bfChannel_to_channel(uint8_t const channel);
+void update_camera_switch(uint16_t *aux, uint8_t index);
 #ifdef INIT_VTX_TABLE
 void InitVtxTable();
 #endif
