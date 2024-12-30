@@ -70,8 +70,6 @@ uint8_t mspVtxLock = 0;
 uint8_t init_table_supported = 0;
 uint8_t init_table_done = 0;
 
-uint8_t cam_index = 0;
-
 #ifdef USE_TP9950
 uint16_t cam_menu_timeout_sec = 0;
 #endif
@@ -472,7 +470,7 @@ uint8_t get_tx_data_5680() // prepare data to VRX
     tx_buf[1] = DP_HEADER1;
     tx_buf[2] = 0xff;
     // len
-    tx_buf[3] = 16;
+    tx_buf[3] = 15;
 
     // video format
     if (video_format == VDO_FMT_720P50)
@@ -550,9 +548,8 @@ uint8_t get_tx_data_5680() // prepare data to VRX
     tx_buf[16] = VTX_VERSION_MAJOR;
     tx_buf[17] = VTX_VERSION_MINOR;
     tx_buf[18] = VTX_VERSION_PATCH_LEVEL;
-    tx_buf[19] = cam_index;
 
-    return 21;
+    return 20;
 }
 
 uint8_t get_tx_data_osd(uint8_t index) // prepare osd+data to VTX
