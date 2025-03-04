@@ -70,6 +70,8 @@ uint8_t mspVtxLock = 0;
 uint8_t init_table_supported = 0;
 uint8_t init_table_done = 0;
 
+uint8_t cam_index = 0;
+
 #ifdef USE_TP9950
 uint16_t cam_menu_timeout_sec = 0;
 #endif
@@ -545,7 +547,7 @@ uint8_t get_tx_data_5680() // prepare data to VRX
 
     tx_buf[15] = (camRatio == 0) ? 0x55 : 0xaa;
 
-    tx_buf[16] = VTX_VERSION_MAJOR;
+    tx_buf[16] = cam_index;
     tx_buf[17] = VTX_VERSION_MINOR;
     tx_buf[18] = VTX_VERSION_PATCH_LEVEL;
 
@@ -2199,7 +2201,7 @@ void update_camera_switch(uint16_t *aux, uint8_t index) {
 
     if (cam_index != cam_index_last) {
         camera_switch(cam_index);
-        camera_init();
+        // camera_init();
         cam_index_last = cam_index;
     }
 }

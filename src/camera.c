@@ -917,10 +917,11 @@ void camera_menu_mode_exit_note() {
 }
 
 void camera_switch(uint8_t index) {
-    uint8_t reg[3] = {0x1b, 0x16, 0x0d};
+    // uint8_t reg[3] = {0x1b, 0x16, 0x0d};
+    uint8_t reg[3] = {0x03, 0x02, 0x01};
 
     I2C_Write8(ADDR_PCA9557, 0x03, 0x00);
     // I2C_Write8(ADDR_PCA9557, 0x01, 0xff);
     I2C_Write8(ADDR_PCA9557, 0x01, reg[index]);
-    WAIT(200); // waiting for camera power up
+    // WAIT(200); // waiting for camera power up
 }
