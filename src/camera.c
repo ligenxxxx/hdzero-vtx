@@ -169,6 +169,7 @@ void camera_mode_detect(uint8_t init) {
 #endif
 }
 #else
+#include <device.h>
 void camera_mode_detect(uint8_t init) {
     uint8_t cycles = 4;
     uint8_t loss = 0;
@@ -182,73 +183,79 @@ void camera_mode_detect(uint8_t init) {
         Set_720P60(IS_RX);
         video_format = VDO_FMT_720P60;
         I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
-    } else if (camera_type == CAMERA_TYPE_RUNCAM_NANO_90) {
-        Init_TC3587(1);
-        if (camera_setting_reg_set[11] == 0) {
-            Set_540P90(0);
-            video_format = VDO_FMT_540P90;
-        } else if (camera_setting_reg_set[11] == 1) {
-            Set_540P90_crop(0);
-            video_format = VDO_FMT_540P90_CROP;
-        } else if (camera_setting_reg_set[11] == 2) {
-            Set_540P60(0);
-            video_format = VDO_FMT_540P60;
-        } else if (camera_setting_reg_set[11] == 3) {
-            Set_960x720P60(0);
-            video_format = VDO_FMT_960x720P60;
-        }
-        I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
-    } else if (camera_type == CAMERA_TYPE_RUNCAM_MICRO_V1) {
-        Set_720P60(IS_RX);
-        Init_TC3587(0);
-        video_format = VDO_FMT_720P60;
-        I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
-    } else if (camera_type == CAMERA_TYPE_RUNCAM_MICRO_V2 || camera_type == CAMERA_TYPE_RUNCAM_MICRO_V3) {
-        if (camera_setting_reg_set[11] == 3) {
-            Set_1080P30(IS_RX);
-            video_format = VDO_FMT_1080P30;
-        } else {
-            Set_720P60(IS_RX);
-            video_format = VDO_FMT_720P60;
-        }
-        Init_TC3587(0);
-        I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
     } else {
-        while (cycles) {
-            if (video_format == VDO_FMT_720P50) {
-                Init_TC3587(0);
-                Set_720P50(IS_RX);
-            } else if (video_format == VDO_FMT_720P60) {
-                Init_TC3587(0);
-                Set_720P60(IS_RX);
-            }
-            WAIT(100);
-
-            for (detect_tries = 0; detect_tries < 5; detect_tries++) {
-                status_reg = ReadReg(0, 0x02);
-                if ((status_reg >> 4) != 0) {
-                    loss = 1;
+        if (probe_device()) {
+            I2C_Write16(ADDR_TC3587, 0x0004, 0x22f);
+        } else {
+            if (camera_type == CAMERA_TYPE_RUNCAM_NANO_90) {
+                Init_TC3587(1);
+                if (camera_setting_reg_set[11] == 0) {
+                    Set_540P90(0);
+                    video_format = VDO_FMT_540P90;
+                } else if (camera_setting_reg_set[11] == 1) {
+                    Set_540P90_crop(0);
+                    video_format = VDO_FMT_540P90_CROP;
+                } else if (camera_setting_reg_set[11] == 2) {
+                    Set_540P60(0);
+                    video_format = VDO_FMT_540P60;
+                } else if (camera_setting_reg_set[11] == 3) {
+                    Set_960x720P60(0);
+                    video_format = VDO_FMT_960x720P60;
                 }
-                WAIT(5);
+                I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
+            } else if (camera_type == CAMERA_TYPE_RUNCAM_MICRO_V1) {
+                Set_720P60(IS_RX);
+                Init_TC3587(0);
+                video_format = VDO_FMT_720P60;
+                I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
+            } else if (camera_type == CAMERA_TYPE_RUNCAM_MICRO_V2 || camera_type == CAMERA_TYPE_RUNCAM_MICRO_V3) {
+                if (camera_setting_reg_set[11] == 3) {
+                    Set_1080P30(IS_RX);
+                    video_format = VDO_FMT_1080P30;
+                } else {
+                    Set_720P60(IS_RX);
+                    video_format = VDO_FMT_720P60;
+                }
+                Init_TC3587(0);
+                I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
+            } else {
+                while (cycles) {
+                    if (video_format == VDO_FMT_720P50) {
+                        Init_TC3587(0);
+                        Set_720P50(IS_RX);
+                    } else if (video_format == VDO_FMT_720P60) {
+                        Init_TC3587(0);
+                        Set_720P60(IS_RX);
+                    }
+                    WAIT(100);
+
+                    for (detect_tries = 0; detect_tries < 5; detect_tries++) {
+                        status_reg = ReadReg(0, 0x02);
+                        if ((status_reg >> 4) != 0) {
+                            loss = 1;
+                        }
+                        WAIT(5);
+                    }
+
+                    if (loss == 0) {
+                        camera_type = CAMERA_TYPE_OUTDATED;
+                        break;
+                    }
+
+                    video_format = (video_format == VDO_FMT_720P60) ? VDO_FMT_720P50 : VDO_FMT_720P60;
+
+                    loss = 0;
+                    cycles--;
+                }
+
+                if (cycles == 0) {
+                    Set_720P60(0);
+                    // WriteReg(0, 0x50, 0x01); // Do not output colorbar
+                    video_format = VDO_FMT_720P60;
+                    I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
+                    camera_type = CAMERA_TYPE_RESERVED;
+                }
             }
-
-            if (loss == 0) {
-                camera_type = CAMERA_TYPE_OUTDATED;
-                break;
-            }
-
-            video_format = (video_format == VDO_FMT_720P60) ? VDO_FMT_720P50 : VDO_FMT_720P60;
-
-            loss = 0;
-            cycles--;
-        }
-
-        if (cycles == 0) {
-            Set_720P60(0);
-            // WriteReg(0, 0x50, 0x01); // Do not output colorbar
-            video_format = VDO_FMT_720P60;
-            I2C_Write16(ADDR_TC3587, 0x0058, 0x00e0);
-            camera_type = CAMERA_TYPE_RESERVED;
         }
     }
     camera_ratio_detect();
